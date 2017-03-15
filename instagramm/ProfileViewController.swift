@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 class ProfileViewController: UIViewController {
 
@@ -21,6 +22,14 @@ class ProfileViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func onLogout(_ sender: Any) {
+        PFUser.logOut()
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "LoginViewController")
+        
+        self.present(vc, animated: true, completion: nil)
+    }
 
     /*
     // MARK: - Navigation

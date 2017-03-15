@@ -22,10 +22,9 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.estimatedRowHeight = 300
-        tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+
         // Do any additional setup after loading the view.
         
         self.user = PFUser.current()
@@ -69,7 +68,7 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
         let cell = tableView.dequeueReusableCell(withIdentifier: "PhotoTableViewCell", for: indexPath) as! PhotoTableViewCell
         
         if let post = posts?[indexPath.row] {
-            cell.captionLabel.text = post["caption"] as! String?
+            cell.captionLabel.text = post["caption"] as! String
             let photo = post["photo"] as! PFObject
             if let imageData = photo["image"] as? PFFile {
                 imageData.getDataInBackground(block: { (data: Data?, error: Error?) in
@@ -81,6 +80,7 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
         }
         return cell
     }
+    
 
     /*
     // MARK: - Navigation

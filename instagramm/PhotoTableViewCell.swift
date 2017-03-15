@@ -12,7 +12,6 @@ import Parse
 class PhotoTableViewCell: UITableViewCell {
 
     @IBOutlet weak var photo: UIImageView!
-    @IBOutlet weak var label: UILabel!
     @IBOutlet weak var captionLabel: UILabel!
     
     var post: PFObject!

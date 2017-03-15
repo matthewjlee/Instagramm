@@ -95,6 +95,7 @@ class CaptureViewController: UIViewController, UIImagePickerControllerDelegate, 
         self.previewImage.image = nil
         self.captionBar.text = ""
         self.captionBar.textColor = UIColor.black
+        self.userPromptLabel.textColor = UIColor.black
         self.previewImage.backgroundColor = UIColor.gray
     }
     

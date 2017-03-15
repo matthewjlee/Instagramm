@@ -12,6 +12,7 @@ import Parse
 class PhotosViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var posts: [PFObject]?
+    var user: PFUser?
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -27,23 +28,26 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.rowHeight = UITableViewAutomaticDimension
         // Do any additional setup after loading the view.
         
+        self.user = PFUser.current()
         //query()
     }
     
     func query() {
         let query = PFQuery(className: "Post")
         query.order(byDescending: "createdAt")
-        query.includeKey("author")
-        query.limit = 20
-        
-        query.findObjectsInBackground { (query: [PFObject]?, error: Error?) in
-            if let query = query {
-                print("queried data")
-                self.posts = query
-                print(self.posts)
-                self.tableView.reloadData()
+        query.includeKey("photo")
+        query.findObjectsInBackground {
+            (results: [PFObject]?, error: Error?) -> Void in
+            if error != nil {
+                print("ERROR: data retrieval failed")
             } else {
-                print(error?.localizedDescription)
+                if let results = results {
+                    print("Successfully retrieved \(results.count) posts")
+                    self.posts = results
+                    self.tableView.reloadData()
+                } else {
+                    print("No results returned")
+                }
             }
         }
     }
@@ -64,9 +68,17 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PhotoTableViewCell", for: indexPath) as! PhotoTableViewCell
         
-        let post = self.posts?[indexPath.row]
-        cell.post = post
-        
+        if let post = posts?[indexPath.row] {
+            cell.captionLabel.text = post["caption"] as! String?
+            let photo = post["photo"] as! PFObject
+            if let imageData = photo["image"] as? PFFile {
+                imageData.getDataInBackground(block: { (data: Data?, error: Error?) in
+                    if let data = data {
+                        cell.photo.image = UIImage.init(data: data)
+                    }
+                })
+            }
+        }
         return cell
     }
 

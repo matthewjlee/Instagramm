@@ -94,6 +94,7 @@ class CaptureViewController: UIViewController, UIImagePickerControllerDelegate, 
     func resetViews() {
         self.previewImage.image = nil
         self.captionBar.text = ""
+        self.captionBar.textColor = UIColor.black
         self.previewImage.backgroundColor = UIColor.gray
     }
     
